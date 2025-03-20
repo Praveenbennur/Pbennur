@@ -1,6 +1,7 @@
 class LoginPage {
     constructor(page) {
         this.page = page;
+        this.page.setDefaultTimeout(10000);
         console.log("Login page is launched successfully");
         this.userInput = page.locator("#user-name");
         this.passInput = page.locator("#password");
@@ -21,6 +22,7 @@ class LoginPage {
     }
 
     async login() {
+
         // Wait for both required elements to be visible
         await Promise.all([
             this.credentialsDiv.waitFor({ state: 'visible' }),
@@ -32,15 +34,17 @@ class LoginPage {
             this.evaluateXPath("//div[@class='login_credentials']/text()[1]"),
             this.evaluateXPath("//div[@class='login_password']/text()[1]")
         ]);
-        console.log("Entered valid username");
 
+
+        await this.page.waitForSelector(".login_wrapper-inner");
         // Fill form fields in parallel
-        await Promise.all([
-            this.userInput.fill(userName),
-            this.passInput.fill(password)
-        ]);
 
-        console.log("Entered valid password");
+        await this.userInput.waitFor({ state: 'visible' });
+        await this.userInput.fill(userName);
+        await this.passInput.fill(password);
+
+
+        console.log("Entered valid username and password");
 
         await this.loginButton.click();
         console.log("Successfully logged in..!");

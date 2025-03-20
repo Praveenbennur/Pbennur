@@ -36,6 +36,7 @@ test('userBuyProducts', async () => {
 
     await loginPage.login();
     let products = new ProductPage(page);
+    products.selectProduct("Sauce Labs Backpack");
 });
 
 
